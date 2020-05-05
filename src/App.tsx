@@ -6,7 +6,7 @@ import DATABASE from "./database/firebase";
 
 require("dotenv").config();
 
-const PhaseContainer = ({ children }: { children: any }) => (
+const PhaseContainer = ({ children }) => (
   <Box border="1px solid blue" minHeight="500px" p="x1" m="x1">
     {children}
   </Box>
