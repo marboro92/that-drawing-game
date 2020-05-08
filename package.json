@@ -16,6 +16,7 @@
     "react": "^16.13.1",
     "react-canvas-draw": "^1.1.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "typescript": "^3.8.3"
   },
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@types/firebase": "^3.2.1",
-    "@types/react-canvas-draw": "^1.1.0"
+    "@types/react-canvas-draw": "^1.1.0",
+    "@types/react-router-dom": "^5.1.5"
   }
 }

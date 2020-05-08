@@ -1,81 +1,39 @@
-import React, { Component } from "react";
-import CanvasDraw from "react-canvas-draw";
-import { Button, NDSProvider, Box, Input, Text } from "@nulogy/components";
+import React from "react";
+import { NDSProvider } from "@nulogy/components";
 
-import DATABASE from "./database/firebase";
+// import DATABASE from "./database/firebase";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import { Game } from "./routes/Game";
+import { Intro } from './routes/Intro';
 
 require("dotenv").config();
 
-const PhaseContainer = ({ children }) => (
-  <Box border="1px solid blue" minHeight="500px" p="x1" m="x1">
-    {children}
-  </Box>
-);
+// const fetchData = async () => {
 
-export default class App extends Component {
-  saveableCanvas: any = null;
-  loadableCanvas: any = null;
+//           await DATABASE.db.collection("cities").doc("LA").set({
+//             name: "Los Angeles",
+//             state: "CA",
+//             country: "USA",
+//           });
+//           alert("Success");
+//         }
 
-  render() {
-    return (
-      <NDSProvider>
-        {/* Phase 1: A phrase! */}
-        <PhaseContainer>
-          <Text>
-            Pick a phrase, noun saying, anything you'd like to the other players
-            to draw!
-          </Text>
-          <Input placeholder="A phrase..." />
-          <Button>Submit</Button>
-          <Text>
-            Okay, hold tight! while we get phrases from all the players
-          </Text>
-        </PhaseContainer>
-        {/* Phase 2: Time to Draw! */}
-        <PhaseContainer>
-          <Text>"The phrase is up here and so you can draw it"</Text>
-          <CanvasDraw
-            ref={(canvasDraw) => (this.saveableCanvas = canvasDraw)}
-          />
-          <Button
-            onClick={async () => {
-              localStorage.setItem(
-                "savedDrawing",
-                this.saveableCanvas.setSaveData()
-              );
+const App = () => <Router>
+  <NDSProvider>
+    <Switch>
+      <Route path="/:roomCode">
+        <Game />
+      </Route>
+      <Route path="/">
+        <Intro />
+      </Route>
+    </Switch>
+  </NDSProvider>
+</Router>
 
-              await DATABASE.db.collection("cities").doc("LA").set({
-                name: "Los Angeles",
-                state: "CA",
-                country: "USA",
-              });
-              alert("Success");
-            }}
-          >
-            Done!
-          </Button>
-        </PhaseContainer>
-        {/* Phase 3: Time to Interpret! */}
-        <PhaseContainer>
-          <Button
-            onClick={() => {
-              this.loadableCanvas.loadSaveData(
-                localStorage.getItem("savedDrawing")
-              );
-            }}
-          >
-            Load!
-          </Button>
-          {/* <CanvasDraw
-            disabled
-            hideGrid
-            ref={(canvasDraw) => (this.loadableCanvas = canvasDraw)}
-            saveData={localStorage.getItem("savedDrawing")}
-          /> */}
-          <Input placeholder="okay... a guess?" />
-          <Button>Submit</Button>
-        </PhaseContainer>
-      </NDSProvider>
-    );
-  }
-}
+
+export default App;
