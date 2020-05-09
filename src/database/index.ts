@@ -15,9 +15,13 @@ const config = {
 firebase.initializeApp(config);
 firebase.analytics();
 
-export default {
-  db: firebase.firestore(),
-  storage: firebase.storage(),
-  dbFunctions: firebase.functions(),
-  dbAnalytics: firebase.analytics(),
+export const db = firebase.firestore();
+export const auth = firebase.auth();
+export const storage = firebase.storage();
+export const dbFunctions = firebase.functions();
+export const dbAnalytics = firebase.analytics();
+
+const provider = new firebase.auth.GoogleAuthProvider();
+export const signInWithGoogle = () => {
+  auth.signInWithPopup(provider);
 };
