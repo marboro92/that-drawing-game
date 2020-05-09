@@ -2,18 +2,29 @@ import React, { useState } from "react";
 import { Button, Text, Box, Input } from "@nulogy/components";
 import { PhaseContainer } from "components/PhaseContainer";
 import { Link } from "react-router-dom";
+import { db } from "database";
 
 export const Intro = ({ children }: any) => {
   const [roomCode, setRoomCode] = useState<String | null>(null);
   const [screenName, setScreenName] = useState<String | null>(null);
+
   const initRoom = async () => {
     // get a room code
-    const roomCode = Math.random().toString(36).substring(7).toUpperCase();
-    // submit screen name
-    // await post room code to db
-    // set roomCode in state
-    setRoomCode(roomCode);
+    const randomCode = Math.random().toString(36).substring(7).toUpperCase();
+
+    try {
+      await db.collection("rooms").add({
+        room_id: randomCode,
+        host_name: screenName,
+        created_at: Date.now(),
+        players: [screenName],
+      });
+      setRoomCode(randomCode);
+    } catch (err) {
+      console.error(err);
+    }
   };
+
   const screenNameHandler = (e: any) => {
     setScreenName(e.target.value);
   };

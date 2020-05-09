@@ -1,21 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import CanvasDraw from "react-canvas-draw";
 import { useParams } from "react-router-dom";
 import { Button, Input, Text } from "@nulogy/components";
+import firebase from "firebase";
 
 import { PhaseContainer } from "components/PhaseContainer";
+import { db } from "database";
 
 export const Game = ({ children }: any) => {
   const { roomCode } = useParams();
-  console.log(roomCode);
+  const [playerName, setPlayerName] = useState("");
+
+  const playerNameHandler = (event: any) => {
+    setPlayerName(event.target.value);
+  };
+
+  const joinRoom = async () => {
+    const response = await db
+      .collection("rooms")
+      .where("room_id", "==", roomCode)
+      .get();
+
+    let roomId = "";
+    response.forEach(function (room) {
+      roomId = room.id;
+    });
+
+    await db
+      .collection("rooms")
+      .doc(roomId)
+      .update({
+        players: firebase.firestore.FieldValue.arrayUnion(playerName),
+      });
+  };
+
   return (
     <>
       {/* Phase 0: IF the game hasn't started yet */}
       <PhaseContainer>
         <Text>Welcome!</Text>
-        <Input placeholder="Enter your screen name" />
-        <Button>Submit</Button>
+        <Input
+          placeholder="Enter your screen name"
+          onChange={playerNameHandler}
+        />
+        <Button onClick={joinRoom}>Submit</Button>
       </PhaseContainer>
+
+      {/* TODO: Only show after playerName submitted */}
       {/* Phase 1: A phrase! */}
       <PhaseContainer>
         <Text>
