@@ -18,6 +18,7 @@ export const Intro = ({ children }: any) => {
     if (roomCode) {
       db.collection("rooms")
         .where("room_id", "==", roomCode)
+        .where("is_active", "==", true)
         .onSnapshot(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
             setPlayers(doc.data().players);
@@ -25,6 +26,7 @@ export const Intro = ({ children }: any) => {
         });
       return () => {
         //Cleanup the subscription
+        //Maybe set is_active_ to false in db?
       };
     }
   }, [roomCode]);
@@ -39,6 +41,7 @@ export const Intro = ({ children }: any) => {
         host_name: hostName,
         created_at: Date.now(),
         players: [hostName],
+        is_active: true
       });
       setRoomCode(randomCode);
     } catch (err) {
