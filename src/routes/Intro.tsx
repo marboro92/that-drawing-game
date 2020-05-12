@@ -10,7 +10,7 @@ type PlayerType = {
 
 export const Intro = ({ children }: any) => {
   const [roomCode, setRoomCode] = useState<String | null>("");
-  const [screenName, setScreenName] = useState<String | null>("");
+  const [hostName, setHostName] = useState<String | null>("");
   const [players, setPlayers] = useState<String[] | null>([]);
 
   useEffect(() => {
@@ -36,9 +36,9 @@ export const Intro = ({ children }: any) => {
     try {
       await db.collection("rooms").add({
         room_id: randomCode,
-        host_name: screenName,
+        host_name: hostName,
         created_at: Date.now(),
-        players: [screenName],
+        players: [hostName],
       });
       setRoomCode(randomCode);
     } catch (err) {
@@ -46,15 +46,15 @@ export const Intro = ({ children }: any) => {
     }
   };
 
-  const screenNameHandler = (e: any) => {
-    setScreenName(e.target.value);
+  const hostNameHandler = (e: any) => {
+    setHostName(e.target.value);
   };
 
   return (
-    <PhaseContainer>
+    <>
       {!roomCode ? (
         <>
-          <Input placeholder="your screenname" onChange={screenNameHandler} />
+          <Input placeholder="You are the host! Enter your player name" onChange={hostNameHandler} />
           <Button onClick={initRoom}>Start a Room</Button>
         </>
       ) : (
@@ -76,14 +76,14 @@ export const Intro = ({ children }: any) => {
                 <li>{player}</li>
               ))}
             </ul>
-            <Text>{screenName} (you)</Text>
+            <Text>{hostName} (you)</Text>
           </Box>
           <Button as={Link} to={`/${roomCode}`}>
             Everyone's in, Start the Game
           </Button>
         </>
       )}
-    </PhaseContainer>
+    </>
   );
 };
 
