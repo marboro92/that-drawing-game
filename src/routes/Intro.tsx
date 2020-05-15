@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button, Input } from "@nulogy/components";
 import { withRouter } from "react-router-dom";
 import { db } from "database";
+import HostContext from '../HostContext';
 
 const Intro = ({ history }: any) => {
+  const { setIsHost } = useContext(HostContext);
   const [hostName, setHostName] = useState<String | null>("");
 
   const initRoom = async () => {
@@ -17,6 +19,8 @@ const Intro = ({ history }: any) => {
         players: [hostName],
         is_active: true,
       });
+
+      setIsHost(true);
 
       // Send user to the lobby of the room code
       history.push(roomCode);
