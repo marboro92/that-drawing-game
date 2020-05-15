@@ -7,7 +7,7 @@ import firebase from "firebase";
 import { PhaseContainer } from "components/PhaseContainer";
 import { db } from "database";
 
-export const Game = ({ children }: any) => {
+const Game = ({ children }: any) => {
   const { roomCode } = useParams();
   const [playerName, setPlayerName] = useState("");
 
@@ -88,3 +88,5 @@ export const Game = ({ children }: any) => {
     </>
   );
 };
+
+export default Game;

@@ -1,44 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { Button, Text, Box, Input } from "@nulogy/components";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Input } from "@nulogy/components";
+import { withRouter } from "react-router-dom";
 import { db } from "database";
 
-export const Intro = ({ children }: any) => {
-  const [roomCode, setRoomCode] = useState<String | null>("");
+const Intro = ({ history }: any) => {
   const [hostName, setHostName] = useState<String | null>("");
-  const [players, setPlayers] = useState<String[] | null>([]);
-
-  useEffect(() => {
-    //Effect here
-    if (roomCode) {
-      db.collection("rooms")
-        .where("room_id", "==", roomCode)
-        .where("is_active", "==", true)
-        .onSnapshot(function (querySnapshot) {
-          querySnapshot.forEach(function (doc) {
-            setPlayers(doc.data().players);
-          });
-        });
-      return () => {
-        //Cleanup the subscription
-        //Maybe set is_active_ to false in db?
-      };
-    }
-  }, [roomCode]);
 
   const initRoom = async () => {
-    // get a room code
-    const randomCode = Math.random().toString(36).substring(7).toUpperCase();
+    const roomCode = Math.random().toString(36).substring(7).toUpperCase();
 
     try {
       await db.collection("rooms").add({
-        room_id: randomCode,
+        room_id: roomCode,
         host_name: hostName,
         created_at: Date.now(),
         players: [hostName],
         is_active: true,
       });
-      setRoomCode(randomCode);
+
+      // Send user to the lobby of the room code
+      history.push(roomCode);
     } catch (err) {
       console.error(err);
     }
@@ -50,43 +31,16 @@ export const Intro = ({ children }: any) => {
 
   return (
     <>
-      {!roomCode ? (
-        <>
-          <Input
-            placeholder="You are the host! Enter your player name"
-            onChange={hostNameHandler}
-          />
-          <Button onClick={initRoom}>Start a Room</Button>
-        </>
-      ) : (
-        <>
-          <Text>
-            Room Code: <b>{roomCode}</b>
-          </Text>
-          <Text>
-            Send the link:{" "}
-            <b>
-              {window.location.href}
-              {roomCode}
-            </b>
-          </Text>
-          <Box>
-            <Text>--- Players will show up here ---</Text>
-            <ul>
-              {players?.map((player) => (
-                <li>{player}</li>
-              ))}
-            </ul>
-            <Text>{hostName} (you)</Text>
-          </Box>
-          <Button as={Link} to={`/${roomCode}`}>
-            Everyone's in, Start the Game
-          </Button>
-        </>
-      )}
+      <Input
+        placeholder="You are the host! Enter your player name"
+        onChange={hostNameHandler}
+      />
+      <Button onClick={initRoom}>Start a Room</Button>
     </>
   );
 };
+
+export default withRouter(Intro);
 
 // DO NOT DELETE
 // HOW TO LISTEN TO REALTIME UPDATES ON A WHOLE COLLECTION
