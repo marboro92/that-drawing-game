@@ -15,11 +15,11 @@ const App = () => (
         <Route exact path="/">
           <Intro />
         </Route>
-        <Route path="/:roomCode">
-          <Lobby />
-        </Route>
         <Route path="/:roomCode/game">
           <Game />
+        </Route>
+        <Route path="/:roomCode">
+          <Lobby />
         </Route>
       </Switch>
     </NDSProvider>
