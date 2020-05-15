@@ -2,8 +2,9 @@ import React from "react";
 import { NDSProvider } from "@nulogy/components";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Game } from "routes/Game";
+import { Lobby } from "routes/Lobby";
 import { Intro } from "routes/Intro";
+import { Game } from "routes/Game";
 
 require("dotenv").config();
 
@@ -11,11 +12,14 @@ const App = () => (
   <Router>
     <NDSProvider>
       <Switch>
-        <Route path="/:roomCode">
-          <Game />
-        </Route>
-        <Route path="/">
+        <Route exact path="/">
           <Intro />
+        </Route>
+        <Route path="/:roomCode">
+          <Lobby />
+        </Route>
+        <Route path="/:roomCode/game">
+          <Game />
         </Route>
       </Switch>
     </NDSProvider>

@@ -1,12 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Text, Box, Input } from "@nulogy/components";
-import { PhaseContainer } from "components/PhaseContainer";
 import { Link } from "react-router-dom";
 import { db } from "database";
 
 export const Intro = ({ children }: any) => {
-  const [roomCode, setRoomCode] = useState<String | null>(null);
-  const [screenName, setScreenName] = useState<String | null>(null);
+  const [roomCode, setRoomCode] = useState<String | null>("");
+  const [hostName, setHostName] = useState<String | null>("");
+  const [players, setPlayers] = useState<String[] | null>([]);
+
+  useEffect(() => {
+    //Effect here
+    if (roomCode) {
+      db.collection("rooms")
+        .where("room_id", "==", roomCode)
+        .where("is_active", "==", true)
+        .onSnapshot(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            setPlayers(doc.data().players);
+          });
+        });
+      return () => {
+        //Cleanup the subscription
+        //Maybe set is_active_ to false in db?
+      };
+    }
+  }, [roomCode]);
 
   const initRoom = async () => {
     // get a room code
@@ -15,9 +33,10 @@ export const Intro = ({ children }: any) => {
     try {
       await db.collection("rooms").add({
         room_id: randomCode,
-        host_name: screenName,
+        host_name: hostName,
         created_at: Date.now(),
-        players: [screenName],
+        players: [hostName],
+        is_active: true,
       });
       setRoomCode(randomCode);
     } catch (err) {
@@ -25,15 +44,18 @@ export const Intro = ({ children }: any) => {
     }
   };
 
-  const screenNameHandler = (e: any) => {
-    setScreenName(e.target.value);
+  const hostNameHandler = (e: any) => {
+    setHostName(e.target.value);
   };
 
   return (
-    <PhaseContainer>
+    <>
       {!roomCode ? (
         <>
-          <Input placeholder="your screenname" onChange={screenNameHandler} />
+          <Input
+            placeholder="You are the host! Enter your player name"
+            onChange={hostNameHandler}
+          />
           <Button onClick={initRoom}>Start a Room</Button>
         </>
       ) : (
@@ -50,13 +72,34 @@ export const Intro = ({ children }: any) => {
           </Text>
           <Box>
             <Text>--- Players will show up here ---</Text>
-            <Text>{screenName} (you)</Text>
+            <ul>
+              {players?.map((player) => (
+                <li>{player}</li>
+              ))}
+            </ul>
+            <Text>{hostName} (you)</Text>
           </Box>
           <Button as={Link} to={`/${roomCode}`}>
             Everyone's in, Start the Game
           </Button>
         </>
       )}
-    </PhaseContainer>
+    </>
   );
 };
+
+// DO NOT DELETE
+// HOW TO LISTEN TO REALTIME UPDATES ON A WHOLE COLLECTION
+// db.collectionGroup("users").onSnapshot((snapshot) => {
+//   snapshot.docChanges().forEach(function (change) {
+//     if (change.type === "added") {
+//       console.log("New: ", change.doc.data());
+//     }
+//     if (change.type === "modified") {
+//       console.log("Modified: ", change.doc.data());
+//     }
+//     if (change.type === "removed") {
+//       console.log("Removed: ", change.doc.data());
+//     }
+//   });
+// });

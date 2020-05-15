@@ -40,7 +40,7 @@ export const Game = ({ children }: any) => {
       <PhaseContainer>
         <Text>Welcome!</Text>
         <Input
-          placeholder="Enter your screen name"
+          placeholder="Enter your player name"
           onChange={playerNameHandler}
         />
         <Button onClick={joinRoom}>Submit</Button>
