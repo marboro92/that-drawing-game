@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Text, Box, Input } from "@nulogy/components";
-import { PhaseContainer } from "components/PhaseContainer";
 import { Link } from "react-router-dom";
 import { db } from "database";
-
-type PlayerType = {
-  name: String;
-};
 
 export const Intro = ({ children }: any) => {
   const [roomCode, setRoomCode] = useState<String | null>("");
@@ -41,7 +36,7 @@ export const Intro = ({ children }: any) => {
         host_name: hostName,
         created_at: Date.now(),
         players: [hostName],
-        is_active: true
+        is_active: true,
       });
       setRoomCode(randomCode);
     } catch (err) {
@@ -57,7 +52,10 @@ export const Intro = ({ children }: any) => {
     <>
       {!roomCode ? (
         <>
-          <Input placeholder="You are the host! Enter your player name" onChange={hostNameHandler} />
+          <Input
+            placeholder="You are the host! Enter your player name"
+            onChange={hostNameHandler}
+          />
           <Button onClick={initRoom}>Start a Room</Button>
         </>
       ) : (
