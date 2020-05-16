@@ -3,10 +3,10 @@ import { Text, Button } from "@nulogy/components";
 import CanvasDraw from "react-canvas-draw";
 
 export const EnterDrawing = ({ children }: any) => {
-  const [drawing, setDrawing] = useState<String>(null);
+  const [drawing, setDrawing] = useState<any>(null);
 
   const handleDrawingSubmit = () => {
-    console.log("User wants to submit drawing: ", drawing);
+    // console.log("User wants to submit drawing: ", drawing);
   };
 
   return (
