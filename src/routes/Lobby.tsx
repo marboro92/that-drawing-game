@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { Button, Text, Box, Input } from "@nulogy/components";
 import { useParams, Link } from "react-router-dom";
 import { db } from "database";
-import HostContext from '../HostContext';
+import HostContext from "../HostContext";
 import firebase from "firebase";
 
 export const Lobby = ({ children }: any) => {
   const { isHost } = useContext(HostContext);
   const { roomCode } = useParams();
+  console.log("roomCode", roomCode);
+
   const [playerInput, setPlayerInput] = useState<String | null>();
   const [playerName, setPlayerName] = useState<String | null>();
   const [players, setPlayers] = useState<String[] | null>([]);
@@ -50,21 +52,19 @@ export const Lobby = ({ children }: any) => {
             players: firebase.firestore.FieldValue.arrayUnion(playerName),
           });
       }
-    }
+    };
     addPlayerToRoom();
-  }, [playerName, roomCode])
+  }, [playerName, roomCode]);
 
   const playerNameHandler = (event: any) => {
     setPlayerInput(event.target.value);
   };
 
   const joinRoom = async () => {
-    await setPlayerName(playerInput)
+    await setPlayerName(playerInput);
   };
 
-  const initGame = async () => {
-
-  };
+  const initGame = async () => {};
 
   return (
     <>
@@ -72,13 +72,9 @@ export const Lobby = ({ children }: any) => {
         Room Code: <b>{roomCode}</b>
       </Text>
       <Text>
-        Send the link:{" "}
-        <b>
-          {window.location.href}
-          {roomCode}
-        </b>
+        Send the link: <b>{window.location.href}</b>
       </Text>
-      {!playerName && !isHost &&
+      {!playerName && !isHost && (
         <>
           <Input
             placeholder="Enter your player name"
@@ -86,17 +82,22 @@ export const Lobby = ({ children }: any) => {
           />
           <Button onClick={joinRoom}>Submit</Button>
         </>
-      }
+      )}
       <Box>
         <ul>
           {players?.map((player) => (
-            <li key={String(player)}>{player}{playerName === player && '(you)'}</li>
+            <li key={String(player)}>
+              {player}
+              {playerName === player && "(you)"}
+            </li>
           ))}
         </ul>
       </Box>
-      {isHost && <Button as={Link} to={`/${roomCode}`} onClick={initGame}>
-        Everyone's in, Start the Game
-          </Button>}
+      {isHost && (
+        <Button as={Link} to={`/${roomCode}`} onClick={initGame}>
+          Everyone's in, Start the Game
+        </Button>
+      )}
     </>
   );
 };
