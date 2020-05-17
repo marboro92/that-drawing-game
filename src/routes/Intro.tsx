@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Button, Input } from "@nulogy/components";
 import { withRouter } from "react-router-dom";
 import { db } from "database";
-import HostContext from '../HostContext';
+import HostContext from "../HostContext";
 
 const Intro = ({ history }: any) => {
   const { setIsHost } = useContext(HostContext);
@@ -18,6 +18,7 @@ const Intro = ({ history }: any) => {
         created_at: Date.now(),
         players: [hostName],
         is_active: true,
+        is_game_ongoing: false,
       });
 
       setIsHost(true);

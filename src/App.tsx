@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NDSProvider } from "@nulogy/components";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Lobby } from "routes/Lobby";
+import Lobby from "routes/Lobby";
 import Intro from "routes/Intro";
 import Game from "routes/Game";
 import HostContext from "HostContext";

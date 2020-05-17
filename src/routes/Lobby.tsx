@@ -1,37 +1,41 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button, Text, Box, Input } from "@nulogy/components";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, withRouter } from "react-router-dom";
 import { db } from "database";
 import HostContext from "../HostContext";
 import firebase from "firebase";
 
-export const Lobby = ({ children }: any) => {
+const Lobby = ({ history }: any) => {
   const { isHost } = useContext(HostContext);
   const { roomCode } = useParams();
-  console.log("roomCode", roomCode);
 
   const [playerInput, setPlayerInput] = useState<String | null>();
   const [playerName, setPlayerName] = useState<String | null>();
   const [players, setPlayers] = useState<String[] | null>([]);
+  const [roomId, setRoomId] = useState("");
+  const [isGameOngoing, setIsGameOngoing] = useState(false);
 
+  // Fetching players in lobby
   useEffect(() => {
-    //Effect here
+    let unsubscibe: any = null;
     if (roomCode) {
-      db.collection("rooms")
+      unsubscibe = db
+        .collection("rooms")
         .where("room_id", "==", roomCode)
         .where("is_active", "==", true)
         .onSnapshot(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
             setPlayers(doc.data().players);
+            setRoomId(doc.id);
           });
         });
       return () => {
-        //Cleanup the subscription
-        //Maybe set is_active_ to false in db?
+        unsubscibe();
       };
     }
   }, [roomCode]);
 
+  //Add player to room
   useEffect(() => {
     const addPlayerToRoom = async () => {
       if (playerName) {
@@ -56,6 +60,30 @@ export const Lobby = ({ children }: any) => {
     addPlayerToRoom();
   }, [playerName, roomCode]);
 
+  // Listen for whether game has begun
+  useEffect(() => {
+    let unsubscribe: any = null;
+    if (roomId) {
+      unsubscribe = db
+        .collection("rooms")
+        .doc(roomId)
+        .onSnapshot(function (querySnapshot) {
+          const responseData = querySnapshot.data();
+          const isGameOngoingDb = responseData?.["is_game_ongoing"];
+          setIsGameOngoing(isGameOngoingDb);
+        });
+    }
+    return () => {
+      unsubscribe && unsubscribe();
+    };
+  }, [history, isGameOngoing, roomCode, roomId]);
+
+  // Redirect player to game is game has begun
+  useEffect(() => {
+    if (isGameOngoing) history.push(`/${roomCode}/game`);
+    return () => {};
+  }, [history, isGameOngoing, roomCode]);
+
   const playerNameHandler = (event: any) => {
     setPlayerInput(event.target.value);
   };
@@ -64,7 +92,11 @@ export const Lobby = ({ children }: any) => {
     await setPlayerName(playerInput);
   };
 
-  const initGame = async () => {};
+  const initGame = async () => {
+    await db.collection("rooms").doc(roomId).update({
+      is_game_ongoing: true,
+    });
+  };
 
   return (
     <>
@@ -101,6 +133,8 @@ export const Lobby = ({ children }: any) => {
     </>
   );
 };
+
+export default withRouter(Lobby);
 
 // DO NOT DELETE
 // HOW TO LISTEN TO REALTIME UPDATES ON A WHOLE COLLECTION
