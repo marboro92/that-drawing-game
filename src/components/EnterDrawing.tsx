@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Text, Button } from "@nulogy/components";
+import { Text } from "@nulogy/components";
 import CanvasDraw from "react-canvas-draw";
+import { Button } from './Button';
 
 export const EnterDrawing = ({ children }: any) => {
   const [drawing, setDrawing] = useState<any>(null);

@@ -1,8 +1,13 @@
-import React from "react";
-import { Box } from "@nulogy/components";
+import styled from 'styled-components';
 
-export const PhaseContainer = ({ children }: any) => (
-  <Box border="1px solid blue" minHeight="600px" p="x1" m="x1">
-    {children}
-  </Box>
-);
+export const PhaseContainer = styled.div({
+  display: "flex",
+  alignItems: "center",
+  flexDirection: "column",
+  maxWidth: "600px",
+  minHeight: "600px",
+  padding: "16px",
+  margin: "8px",
+  border: "1px solid blue",
+  fontFamily: "Open Sans"
+})

@@ -2,13 +2,14 @@ import React from "react";
 
 import { EnterPhrase } from "components/EnterPhrase";
 import { EnterDrawing } from "components/EnterDrawing";
+import { PhaseContainer } from '../components/PhaseContainer';
 
 const Game = ({ children }: any) => {
   return (
-    <>
+    <PhaseContainer>
       <EnterPhrase />
       <EnterDrawing />
-    </>
+    </PhaseContainer>
   );
 
   // return (

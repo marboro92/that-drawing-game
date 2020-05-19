@@ -1,8 +1,17 @@
 import React, { useState, useContext } from "react";
-import { Button, Input } from "@nulogy/components";
+import { Input } from "@nulogy/components";
 import { withRouter } from "react-router-dom";
 import { db } from "database";
-import HostContext from "../HostContext";
+import styled from 'styled-components';
+
+import HostContext from '../HostContext';
+import { PhaseContainer } from '../components/PhaseContainer';
+import { Button } from '../components/Button';
+
+const Title = styled.h1({
+  color: "blue",
+  fontWeight: "bold"
+});
 
 const Intro = ({ history }: any) => {
   const { setIsHost } = useContext(HostContext);
@@ -35,13 +44,14 @@ const Intro = ({ history }: any) => {
   };
 
   return (
-    <>
+    <PhaseContainer>
+      <Title>That Drawing Game.</Title>
       <Input
         placeholder="You are the host! Enter your player name"
         onChange={hostNameHandler}
       />
       <Button onClick={initRoom}>Start a Room</Button>
-    </>
+    </PhaseContainer>
   );
 };
 

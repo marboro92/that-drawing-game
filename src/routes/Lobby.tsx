@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button, Text, Box, Input } from "@nulogy/components";
+import { Text, Box, Input } from "@nulogy/components";
 import { useParams, Link, withRouter } from "react-router-dom";
 import { db } from "database";
 import HostContext from "../HostContext";
 import firebase from "firebase";
+import { PhaseContainer } from '../components/PhaseContainer';
+import { Button } from '../components/Button';
 
 const Lobby = ({ history }: any) => {
   const { isHost } = useContext(HostContext);
@@ -81,7 +83,7 @@ const Lobby = ({ history }: any) => {
   // Redirect player to game is game has begun
   useEffect(() => {
     if (isGameOngoing) history.push(`/${roomCode}/game`);
-    return () => {};
+    return () => { };
   }, [history, isGameOngoing, roomCode]);
 
   const playerNameHandler = (event: any) => {
@@ -99,7 +101,7 @@ const Lobby = ({ history }: any) => {
   };
 
   return (
-    <>
+    <PhaseContainer>
       <Text>
         Room Code: <b>{roomCode}</b>
       </Text>
@@ -112,7 +114,7 @@ const Lobby = ({ history }: any) => {
             placeholder="Enter your player name"
             onChange={playerNameHandler}
           />
-          <Button onClick={joinRoom}>Submit</Button>
+
         </>
       )}
       <Box>
@@ -125,12 +127,10 @@ const Lobby = ({ history }: any) => {
           ))}
         </ul>
       </Box>
-      {isHost && (
-        <Button as={Link} to={`/${roomCode}`} onClick={initGame}>
-          Everyone's in, Start the Game
-        </Button>
-      )}
-    </>
+      {isHost ? <Button as={Link} to={`/${roomCode}`} onClick={initGame}>
+        Everyone's in, Start the Game
+        </Button> : <Button onClick={joinRoom}>Submit</Button>}
+    </PhaseContainer>
   );
 };
 

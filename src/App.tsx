@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { NDSProvider } from "@nulogy/components";
-
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import "typeface-open-sans";
+
 import Lobby from "routes/Lobby";
 import Intro from "routes/Intro";
 import Game from "routes/Game";

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Input, Button } from "@nulogy/components";
+import { Input } from "@nulogy/components";
+import { Button } from './Button';
 
 export const EnterPhrase = ({ children }: any) => {
   const [phrase, setPhrase] = useState<String>("");
