@@ -1,19 +1,24 @@
 import React, { useState, useContext } from "react";
 import { Input } from "@nulogy/components";
 import { withRouter } from "react-router-dom";
+import { History } from "history";
 import { db } from "database";
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import HostContext from '../HostContext';
-import { PhaseContainer } from '../components/PhaseContainer';
-import { Button } from '../components/Button';
+import HostContext from "../HostContext";
+import { PhaseContainer } from "../components/PhaseContainer";
+import { Button } from "../components/Button";
 
 const Title = styled.h1({
   color: "blue",
-  fontWeight: "bold"
+  fontWeight: "bold",
 });
 
-const Intro = ({ history }: any) => {
+type Props = {
+  history: History;
+};
+
+const Intro: React.FC<Props> = ({ history }) => {
   const { setIsHost } = useContext(HostContext);
   const [hostName, setHostName] = useState<String | null>("");
 
@@ -39,8 +44,9 @@ const Intro = ({ history }: any) => {
     }
   };
 
-  const hostNameHandler = (e: any) => {
-    setHostName(e.target.value);
+  const hostNameHandler = (event: React.FormEvent<EventTarget>) => {
+    const target = event.target as HTMLInputElement;
+    setHostName(target.value);
   };
 
   return (

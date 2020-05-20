@@ -2,9 +2,13 @@ import React from "react";
 
 import { EnterPhrase } from "components/EnterPhrase";
 import { EnterDrawing } from "components/EnterDrawing";
-import { PhaseContainer } from '../components/PhaseContainer';
+import { PhaseContainer } from "../components/PhaseContainer";
 
-const Game = ({ children }: any) => {
+type Props = {
+  children?: React.ReactNode;
+};
+
+const Game: React.FC<Props> = ({ children }) => {
   return (
     <PhaseContainer>
       <EnterPhrase />

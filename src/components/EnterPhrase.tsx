@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import { Input } from "@nulogy/components";
-import { Button } from './Button';
+import { Button } from "./Button";
+import { postContent } from "database/content";
 
-export const EnterPhrase = ({ children }: any) => {
-  const [phrase, setPhrase] = useState<String>("");
+type Props = {
+  children?: React.ReactNode;
+};
 
-  const handlePhraseChange = (e: any) => {
-    setPhrase(e.target.value);
+export const EnterPhrase: React.FC<Props> = ({ children }) => {
+  const [phrase, setPhrase] = useState<string>("");
+
+  const handlePhraseChange = (event: React.FormEvent<EventTarget>) => {
+    const target = event.target as HTMLInputElement;
+    setPhrase(target.value);
   };
 
-  const handlePhraseSubmit = () => {
+  const handlePhraseSubmit = (): void => {
     console.log("User wants to submit phrase: ", phrase);
+    postContent({ roomId: "1234", content: phrase });
+
+    //TODO: Post phrase to db under "rooms"
   };
 
   return (

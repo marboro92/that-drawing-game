@@ -2,12 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import { Text, Box, Input } from "@nulogy/components";
 import { useParams, Link, withRouter } from "react-router-dom";
 import { db } from "database";
+import { History } from "history";
+
 import HostContext from "../HostContext";
 import firebase from "firebase";
-import { PhaseContainer } from '../components/PhaseContainer';
-import { Button } from '../components/Button';
+import { PhaseContainer } from "../components/PhaseContainer";
+import { Button } from "../components/Button";
 
-const Lobby = ({ history }: any) => {
+type Props = {
+  history: History;
+};
+
+const Lobby = ({ history }: Props) => {
   const { isHost } = useContext(HostContext);
   const { roomCode } = useParams();
 
@@ -83,11 +89,12 @@ const Lobby = ({ history }: any) => {
   // Redirect player to game is game has begun
   useEffect(() => {
     if (isGameOngoing) history.push(`/${roomCode}/game`);
-    return () => { };
+    return () => {};
   }, [history, isGameOngoing, roomCode]);
 
-  const playerNameHandler = (event: any) => {
-    setPlayerInput(event.target.value);
+  const playerNameHandler = (event: React.FormEvent<EventTarget>) => {
+    const target = event.target as HTMLInputElement;
+    setPlayerInput(target.value);
   };
 
   const joinRoom = async () => {
@@ -114,7 +121,6 @@ const Lobby = ({ history }: any) => {
             placeholder="Enter your player name"
             onChange={playerNameHandler}
           />
-
         </>
       )}
       <Box>
@@ -127,9 +133,13 @@ const Lobby = ({ history }: any) => {
           ))}
         </ul>
       </Box>
-      {isHost ? <Button as={Link} to={`/${roomCode}`} onClick={initGame}>
-        Everyone's in, Start the Game
-        </Button> : <Button onClick={joinRoom}>Submit</Button>}
+      {isHost ? (
+        <Button as={Link} to={`/${roomCode}`} onClick={initGame}>
+          Everyone's in, Start the Game
+        </Button>
+      ) : (
+        <Button onClick={joinRoom}>Submit</Button>
+      )}
     </PhaseContainer>
   );
 };
