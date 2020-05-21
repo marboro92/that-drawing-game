@@ -12,16 +12,24 @@ type Props = {
 const Game: React.FC<Props> = ({ children }) => {
   const [isDrawPhase, setIsDrawPhase] = useState(false);
 
-  const handleGuessSubmission = async (phrase: string) => {
+  const handleGuessSubmit = async (phrase: string) => {
     console.log("User wants to submit phrase: ", phrase);
     await postContent({ roomId: "1234", content: phrase });
     setIsDrawPhase(true);
   }
 
+  const handleDrawingSubmit = (drawing: string) => {
+    console.log("User wants to submit drawing: ", drawing);
+    postContent({ roomId: "1234", content: drawing });
+
+    setIsDrawPhase(false);
+
+  };
+
   return (
     <PhaseContainer>
-      {!isDrawPhase ? <EnterPhrase onSubmit={handleGuessSubmission} /> :
-        <EnterDrawing />}
+      {!isDrawPhase ? <EnterPhrase onSubmit={handleGuessSubmit} /> :
+        <EnterDrawing onSubmit={handleDrawingSubmit} />}
     </PhaseContainer>
   );
 
