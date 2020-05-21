@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Input } from "@nulogy/components";
 import { Button } from "./Button";
-import { postContent } from "database/content";
 
 type Props = {
   children?: React.ReactNode,
