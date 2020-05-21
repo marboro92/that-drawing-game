@@ -1,18 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { EnterPhrase } from "components/EnterPhrase";
 import { EnterDrawing } from "components/EnterDrawing";
 import { PhaseContainer } from "../components/PhaseContainer";
+import { postContent } from "database/content";
 
 type Props = {
   children?: React.ReactNode;
 };
 
 const Game: React.FC<Props> = ({ children }) => {
+  const [isDrawPhase, setIsDrawPhase] = useState(false);
+
+  const handleGuessSubmission = async (phrase: string) => {
+    console.log("User wants to submit phrase: ", phrase);
+    await postContent({ roomId: "1234", content: phrase });
+    setIsDrawPhase(true);
+  }
+
   return (
     <PhaseContainer>
-      <EnterPhrase />
-      <EnterDrawing />
+      {!isDrawPhase ? <EnterPhrase onSubmit={handleGuessSubmission} /> :
+        <EnterDrawing />}
     </PhaseContainer>
   );
 

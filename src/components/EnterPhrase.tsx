@@ -4,22 +4,16 @@ import { Button } from "./Button";
 import { postContent } from "database/content";
 
 type Props = {
-  children?: React.ReactNode;
+  children?: React.ReactNode,
+  onSubmit: Function
 };
 
-export const EnterPhrase: React.FC<Props> = ({ children }) => {
+export const EnterPhrase: React.FC<Props> = ({ onSubmit, children }) => {
   const [phrase, setPhrase] = useState<string>("");
 
   const handlePhraseChange = (event: React.FormEvent<EventTarget>) => {
     const target = event.target as HTMLInputElement;
     setPhrase(target.value);
-  };
-
-  const handlePhraseSubmit = (): void => {
-    console.log("User wants to submit phrase: ", phrase);
-    postContent({ roomId: "1234", content: phrase });
-
-    //TODO: Post phrase to db under "rooms"
   };
 
   return (
@@ -28,7 +22,7 @@ export const EnterPhrase: React.FC<Props> = ({ children }) => {
         placeholder="Please enter your guess"
         onChange={handlePhraseChange}
       />
-      <Button onClick={handlePhraseSubmit}>Submit</Button>
+      <Button onClick={() => onSubmit(phrase)}>Submit</Button>
     </>
   );
 };
