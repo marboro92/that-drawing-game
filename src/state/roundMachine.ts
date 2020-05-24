@@ -11,28 +11,27 @@ interface RoundStateSchema {
 }
 
 // The events that the machine handles
-type RoundEvent =
-  | { type: "INTIAL" }
-  | { type: "IN_PROGRESS" }
-  | { type: "FINAL" };
+type RoundEvent = { type: "SUBMIT_SUCCESS" } | { type: "SUBMIT_SUCCESS_FINAL" };
 
-// The context (extended state) of the machine
-// interface RoundContext {
-//   elapsed: number;
-// }
-
-export const RoundMachine = Machine<null, RoundStateSchema, RoundEvent>({
+export const RoundMachine = Machine<RoundStateSchema, RoundEvent>({
   id: "round",
   initial: "initial-text",
   states: {
     "initial-text": {
-      on: {},
+      on: {
+        SUBMIT_SUCCESS: "draw-image-for-text",
+      },
     },
     "draw-image-for-text": {
-      on: {},
+      on: {
+        SUBMIT_SUCCESS: "write-text-for-image",
+      },
     },
     "write-text-for-image": {
-      on: {},
+      on: {
+        SUBMIT_SUCCESS: "draw-image-for-text",
+        SUBMIT_SUCCESS_FINAL: "final-text",
+      },
     },
     "final-text": {
       type: "final",
