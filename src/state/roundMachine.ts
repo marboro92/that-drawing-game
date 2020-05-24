@@ -1,4 +1,5 @@
 import { Machine } from "xstate";
+import { assign } from "xstate/lib/actionTypes";
 
 // The hierarchical schema for the states
 interface RoundStateSchema {
@@ -13,13 +14,32 @@ interface RoundStateSchema {
 // The events that the machine handles
 type RoundEvent = { type: "SUBMIT_SUCCESS" } | { type: "SUBMIT_SUCCESS_FINAL" };
 
-export const RoundMachine = Machine<RoundStateSchema, RoundEvent>({
+type RoundEventContext = {
+  contentArray: string[];
+};
+
+export const RoundMachine = Machine<
+  RoundEventContext,
+  RoundStateSchema,
+  RoundEvent
+>({
   id: "round",
   initial: "initial-text",
+  context: {
+    contentArray: [], //Array of texta nd images entered by the user sequentially in diff turns
+  },
   states: {
     "initial-text": {
       on: {
-        SUBMIT_SUCCESS: "draw-image-for-text",
+        SUBMIT_SUCCESS: {
+          target: "",
+          actions: assign({
+            contentArray: (context, event) => {
+              console.log("context", context);
+              console.log("event", event);
+            },
+          }),
+        },
       },
     },
     "draw-image-for-text": {
