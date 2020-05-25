@@ -4,16 +4,21 @@ import firebase from "firebase";
 type PostContentArgs = {
   roomId: string;
   content: string;
+  playerName: string;
 };
 
 // TODO: Add roomId to context
-// TODO: Get roomId before posting to db
-export const postContent = async ({ roomId, content }: PostContentArgs) => {
+export const postContent = async ({
+  roomId,
+  content,
+  playerName,
+}: PostContentArgs) => {
   await db
     .collection("rooms")
     .doc(roomId)
     .update({
-      content: firebase.firestore.FieldValue.arrayUnion(content),
+      [`players.${playerName}`]: firebase.firestore.FieldValue.arrayUnion(
+        content
+      ),
     });
-  console.log("DONE!");
 };

@@ -14,22 +14,32 @@ const Game: React.FC<Props> = ({ children }) => {
 
   const handleGuessSubmit = async (phrase: string) => {
     console.log("User wants to submit phrase: ", phrase);
-    await postContent({ roomId: "1234", content: phrase });
+    await postContent({
+      roomId: "ppyt7mvTUh87FyQ3pxCF",
+      content: phrase,
+      playerName: "rahul",
+    });
     setIsDrawPhase(true);
-  }
+  };
 
   const handleDrawingSubmit = (drawing: string) => {
     console.log("User wants to submit drawing: ", drawing);
-    postContent({ roomId: "1234", content: drawing });
+    postContent({
+      roomId: "ppyt7mvTUh87FyQ3pxCF",
+      content: drawing,
+      playerName: "rahul",
+    });
 
     setIsDrawPhase(false);
-
   };
 
   return (
     <PhaseContainer>
-      {!isDrawPhase ? <EnterPhrase onSubmit={handleGuessSubmit} /> :
-        <EnterDrawing onSubmit={handleDrawingSubmit} />}
+      {!isDrawPhase ? (
+        <EnterPhrase onSubmit={handleGuessSubmit} />
+      ) : (
+        <EnterDrawing onSubmit={handleDrawingSubmit} />
+      )}
     </PhaseContainer>
   );
 

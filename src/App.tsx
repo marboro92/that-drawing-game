@@ -11,9 +11,21 @@ import HostContext from "HostContext";
 require("dotenv").config();
 
 const App = () => {
-  const [isHost, setIsHost] = useState(false);
+  const [isHost, setIsHost] = useState<boolean>(false);
+  const [playerName, setPlayerName] = useState<string | null>("");
+  const [roomId, setRoomId] = useState<string | null>("");
+
+  const contextValue = {
+    isHost,
+    playerName,
+    roomId,
+    setIsHost,
+    setPlayerName,
+    setRoomId,
+  };
+
   return (
-    <HostContext.Provider value={{ isHost, setIsHost }}>
+    <HostContext.Provider value={contextValue}>
       <Router>
         <NDSProvider>
           <Switch>

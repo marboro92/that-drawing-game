@@ -5,7 +5,6 @@ import { db } from "database";
 import { History } from "history";
 
 import HostContext from "../HostContext";
-import firebase from "firebase";
 import { PhaseContainer } from "../components/PhaseContainer";
 import { Button } from "../components/Button";
 
@@ -14,12 +13,12 @@ type Props = {
 };
 
 const Lobby = ({ history }: Props) => {
-  const { isHost } = useContext(HostContext);
+  const { isHost, playerName, setPlayerName } = useContext(HostContext);
   const { roomCode } = useParams();
 
-  const [playerInput, setPlayerInput] = useState<String | null>();
-  const [playerName, setPlayerName] = useState<String | null>();
-  const [players, setPlayers] = useState<String[] | null>([]);
+  const [playerInput, setPlayerInput] = useState<string | null>("");
+  // const [playerName, setPlayerName] = useState<string | null>();
+  const [players, setPlayers] = useState<string[] | null>([]);
   const [roomId, setRoomId] = useState("");
   const [isGameOngoing, setIsGameOngoing] = useState(false);
 
@@ -33,7 +32,8 @@ const Lobby = ({ history }: Props) => {
         .where("is_active", "==", true)
         .onSnapshot(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
-            setPlayers(doc.data().players);
+            const playersObject = doc.data().players;
+            setPlayers(Object.keys(playersObject));
             setRoomId(doc.id);
           });
         });
@@ -53,15 +53,21 @@ const Lobby = ({ history }: Props) => {
           .get();
 
         let roomId = "";
+        let playersFromDb = {};
         response.forEach(function (room) {
           roomId = room.id;
+          const { players } = room.data();
+          playersFromDb = players;
         });
 
         await db
           .collection("rooms")
           .doc(roomId)
           .update({
-            players: firebase.firestore.FieldValue.arrayUnion(playerName),
+            players: {
+              ...playersFromDb,
+              [playerName]: [],
+            },
           });
       }
     };
