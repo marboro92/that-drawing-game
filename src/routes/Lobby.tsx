@@ -13,13 +13,13 @@ type Props = {
 };
 
 const Lobby = ({ history }: Props) => {
-  const { isHost, playerName, setPlayerName } = useContext(HostContext);
+  const { isHost, roomId, setRoomId, playerName, setPlayerName } = useContext(
+    HostContext
+  );
   const { roomCode } = useParams();
 
   const [playerInput, setPlayerInput] = useState<string | null>("");
-  // const [playerName, setPlayerName] = useState<string | null>();
   const [players, setPlayers] = useState<string[] | null>([]);
-  const [roomId, setRoomId] = useState("");
   const [isGameOngoing, setIsGameOngoing] = useState(false);
 
   // Fetching players in lobby
