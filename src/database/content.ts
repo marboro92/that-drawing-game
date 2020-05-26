@@ -7,7 +7,6 @@ type PostContentArgs = {
   playerName: string;
 };
 
-// TODO: Add roomId to context
 export const postContent = async ({
   roomId,
   content,
