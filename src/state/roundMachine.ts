@@ -33,12 +33,6 @@ export const RoundMachine = Machine<
       on: {
         SUBMIT_SUCCESS: {
           target: "",
-          actions: assign({
-            contentArray: (context, event) => {
-              console.log("context", context);
-              console.log("event", event);
-            },
-          }),
         },
       },
     },
