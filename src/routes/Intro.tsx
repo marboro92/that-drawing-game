@@ -19,23 +19,27 @@ type Props = {
 };
 
 const Intro: React.FC<Props> = ({ history }) => {
-  const { setIsHost } = useContext(HostContext);
-  const [hostName, setHostName] = useState<String | null>("");
+  const { setIsHost, setPlayerName, setRoomId } = useContext(HostContext);
+  const [hostName, setHostName] = useState<string>("");
 
   const initRoom = async () => {
     const roomCode = Math.random().toString(36).substring(7).toUpperCase();
 
     try {
-      await db.collection("rooms").add({
+      const savedRoom = await db.collection("rooms").add({
         room_id: roomCode,
         host_name: hostName,
         created_at: Date.now(),
-        players: [hostName],
+        players: { [hostName]: [] },
         is_active: true,
         is_game_ongoing: false,
       });
 
+      const roomId = savedRoom.id;
+
       setIsHost(true);
+      setPlayerName(hostName); //Host is also a player
+      setRoomId(roomId);
 
       // Send user to the lobby of the room code
       history.push(roomCode);
