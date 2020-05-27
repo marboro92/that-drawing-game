@@ -92,7 +92,7 @@ const Lobby = ({ history }: Props) => {
     };
   }, [history, isGameOngoing, roomCode, roomId]);
 
-  // Redirect player to game is game has begun
+  // Redirect player to game if game has begun
   useEffect(() => {
     if (isGameOngoing) history.push(`/${roomCode}/game`);
     return () => {};

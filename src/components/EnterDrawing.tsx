@@ -25,7 +25,9 @@ export const EnterDrawing: React.FC<Props> = ({ onSubmit, children }) => {
     const neighbour = isLastPlayer
       ? playersInRoom[0]
       : playersInRoom[indexOfCurrentPlayer - 1];
-    const phrase = room.players[neighbour][0] || "there isn't one yet";
+    const phrase = "there isn't one yet";
+    //TODO: Fix this
+    // const phrase = room.players[neighbour][0] || "there isn't one yet";
     return phrase;
   };
 
