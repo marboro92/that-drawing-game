@@ -7,6 +7,7 @@ import Lobby from "routes/Lobby";
 import Intro from "routes/Intro";
 import Game from "routes/Game";
 import HostContext from "HostContext";
+import { CONTENT_TYPES } from "utilities/content-types";
 
 require("dotenv").config();
 
@@ -15,16 +16,19 @@ const App = () => {
   const [playerName, setPlayerName] = useState<string | null>("");
   const [roomId, setRoomId] = useState<string | null>("");
   const [room, setRoom] = useState<{} | null>("");
+  const [roundType, setRoundType] = useState<{} | null>(CONTENT_TYPES.phrase);
 
   const contextValue = {
     isHost,
     playerName,
     roomId,
     room,
+    roundType,
     setIsHost,
     setPlayerName,
     setRoomId,
     setRoom,
+    setRoundType
   };
 
   return (

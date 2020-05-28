@@ -1,27 +1,25 @@
 import React, { useState, useContext, useEffect } from "react";
-
-import { db } from "database";
-import { EnterPhrase } from "components/EnterPhrase";
-import { EnterDrawing } from "components/EnterDrawing";
 import { PhaseContainer } from "../components/PhaseContainer";
-import { postContent } from "database/content";
 import HostContext from "../HostContext";
-import { CONTENT_TYPES } from "utilities/content-types";
+
+
 import { WaitingScreen } from "components/WaitingScreen";
+import watchRoom from '../database/watchRoom';
+import PlayingPhase from "components/PlayingPhase";
 
 type Props = {
   children?: React.ReactNode;
 };
 
-type isRoundCompleteTypes = {
+type checkAllPlayersCompletedRound = {
   players: any;
   roundNumber: number;
 };
 
-const checkRoundComplete = ({
+const checkAllPlayersCompletedRound = ({
   players = [],
   roundNumber,
-}: isRoundCompleteTypes) => {
+}: checkAllPlayersCompletedRound) => {
   const values = Object.values(players);
   const filteredValues = values.filter((value) => value.length === roundNumber);
 
@@ -29,9 +27,9 @@ const checkRoundComplete = ({
 };
 
 const Game: React.FC<Props> = ({ children }) => {
-  const { playerName, roomId, setRoom, room } = useContext(HostContext);
+  const { roomId, setRoom, room } = useContext(HostContext);
 
-  const [isDrawPhase, setIsDrawPhase] = useState(false);
+
   const [canProceedToNextRound, setCanProceedToNextRound] = useState(false);
   const [roundNumber, setRoundNumber] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -45,13 +43,7 @@ const Game: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     let unsubscibe: any = null;
     if (roomId) {
-      unsubscibe = db
-        .collection("rooms")
-        .doc(roomId)
-        .onSnapshot(function (querySnapshot) {
-          const room = querySnapshot.data();
-          setRoom(room);
-        });
+      unsubscibe = watchRoom(roomId, setRoom)
       return () => {
         unsubscibe();
       };
@@ -61,7 +53,7 @@ const Game: React.FC<Props> = ({ children }) => {
   // Checks if round is complete
   useEffect(() => {
     const players = room.players;
-    const isRoundComplete: boolean = checkRoundComplete({
+    const isRoundComplete: boolean = checkAllPlayersCompletedRound({
       players,
       roundNumber,
     });
@@ -74,51 +66,13 @@ const Game: React.FC<Props> = ({ children }) => {
     canProceedToNextRound && handleProceedToNextRound();
   }, [canProceedToNextRound]);
 
-  type ContentSubmitParams = {
-    contentType: string;
-    content: string;
-  };
+  const finishPlaying = () => {
+    setIsPlaying(false)
+  }
 
-  const handleContentSubmit = async ({
-    contentType,
-    content,
-  }: ContentSubmitParams) => {
-    setIsPlaying(false);
-    await postContent({
-      roomId,
-      content: content,
-      playerName,
-    });
-
-    contentType === CONTENT_TYPES.drawing
-      ? setIsDrawPhase(false)
-      : setIsDrawPhase(true);
-  };
-
-  // Waiting rooms
-  if (!isPlaying)
-    return (
-      <PhaseContainer>
-        <WaitingScreen />
-      </PhaseContainer>
-    );
-
-  // Player actions
   return (
     <PhaseContainer>
-      {!isDrawPhase ? (
-        <EnterPhrase
-          onSubmit={(content: string) =>
-            handleContentSubmit({ contentType: CONTENT_TYPES.phrase, content })
-          }
-        />
-      ) : (
-        <EnterDrawing
-          onSubmit={(content: string) =>
-            handleContentSubmit({ contentType: CONTENT_TYPES.drawing, content })
-          }
-        />
-      )}
+      {isPlaying ? <PlayingPhase onSubmitContent={finishPlaying} /> : <WaitingScreen />}
     </PhaseContainer>
   );
 };
