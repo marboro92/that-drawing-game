@@ -1,5 +1,5 @@
 import React from "react";
-import { CONTENT_TYPES } from 'utilities/content-types';
+import { CONTENT_TYPES } from "utilities/content-types";
 
 const HostContext: any = React.createContext({
   isHost: false,
