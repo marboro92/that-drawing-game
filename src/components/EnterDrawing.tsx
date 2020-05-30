@@ -11,7 +11,7 @@ type Props = {
 
 export const EnterDrawing: React.FC<Props> = ({ onSubmit, children }) => {
   const [canvasRef, setCanvasRef] = useState<any>(null);
-  const { room, playerName } = useContext(HostContext);
+  const { room, playerName, roundNumber } = useContext(HostContext);
 
   const handleSubmit = () => {
     const drawing = canvasRef.getSaveData();
@@ -22,12 +22,10 @@ export const EnterDrawing: React.FC<Props> = ({ onSubmit, children }) => {
     const playersInRoom: string[] = Object.keys(room.players).sort();
     const indexOfCurrentPlayer = playersInRoom.indexOf(playerName);
     const isLastPlayer = indexOfCurrentPlayer === playersInRoom.length - 1;
-    const neighbour = isLastPlayer
+    const neighboursName = isLastPlayer
       ? playersInRoom[0]
-      : playersInRoom[indexOfCurrentPlayer - 1];
-    const phrase = "there isn't one yet";
-    //TODO: Fix this
-    // const phrase = room.players[neighbour][0] || "there isn't one yet";
+      : playersInRoom[indexOfCurrentPlayer + 1];
+    const phrase = room.players[neighboursName][roundNumber - 2] || "!!! BUG: MISSING PHRASE!!!";
     return phrase;
   };
 
