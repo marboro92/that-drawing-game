@@ -28,7 +28,7 @@ const App = () => {
     setPlayerName,
     setRoomId,
     setRoom,
-    setRoundType
+    setRoundType,
   };
 
   return (

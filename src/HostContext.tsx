@@ -9,11 +9,11 @@ const HostContext: any = React.createContext({
   roundType: CONTENT_TYPES.phrase,
 
   //Functions
-  setIsHost: (val: boolean) => { },
-  setPlayerName: (val: string | null) => { },
-  setRoomId: (val: string | null) => { },
-  setRoom: (val: any) => { },
-  setRoundType: (val: string) => { },
+  setIsHost: (val: boolean) => {},
+  setPlayerName: (val: string | null) => {},
+  setRoomId: (val: string | null) => {},
+  setRoom: (val: any) => {},
+  setRoundType: (val: string) => {},
 });
 
 export default HostContext;
