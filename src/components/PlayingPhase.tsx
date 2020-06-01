@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { CONTENT_TYPES } from "utilities/content-types";
 import { postContent } from "database/content";
-import HostContext from "../HostContext";
+import AppContext from "../AppContext";
 import { EnterPhrase } from "components/EnterPhrase";
 import { EnterDrawing } from "components/EnterDrawing";
 
@@ -11,11 +11,18 @@ type ContentSubmitParams = {
 };
 
 type Props = {
-  onSubmitContent: Function
-}
+  onSubmitContent: () => void;
+};
 
 const PlayingPhase: React.FC<Props> = ({ onSubmitContent }) => {
-  const { playerName, roomId, roundType, setRoundType, roundNumber, room } = useContext(HostContext);
+  const {
+    playerName,
+    roomId,
+    roundType,
+    setRoundType,
+    roundNumber,
+    room,
+  } = useContext(AppContext);
   const handleContentSubmit = async ({
     contentType,
     content,
@@ -23,7 +30,7 @@ const PlayingPhase: React.FC<Props> = ({ onSubmitContent }) => {
     onSubmitContent();
     /// needs loading screen nad error handing
     if (contentType === CONTENT_TYPES.drawing) {
-      setRoundType(CONTENT_TYPES.phrase)
+      setRoundType(CONTENT_TYPES.phrase);
     } else {
       setRoundType(CONTENT_TYPES.drawing);
     }
@@ -41,9 +48,9 @@ const PlayingPhase: React.FC<Props> = ({ onSubmitContent }) => {
     const neighboursName = isLastPlayer
       ? playersInRoom[0]
       : playersInRoom[indexOfCurrentPlayer + 1];
-    const neighboursContent = room.players[neighboursName]
-    console.log("neig", neighboursContent)
-    return neighboursContent
+
+    const neighboursContent = room.players[neighboursName];
+    return neighboursContent;
   };
 
   const getContent = () => {
@@ -51,8 +58,12 @@ const PlayingPhase: React.FC<Props> = ({ onSubmitContent }) => {
     return phrase;
   };
 
-  const phrase = roundType === CONTENT_TYPES.drawing && roundNumber > 1 ? getContent() : null;
-  const image = roundType === CONTENT_TYPES.phrase && roundNumber > 1 ? getContent() : null;
+  const phrase =
+    roundType === CONTENT_TYPES.drawing && roundNumber > 1
+      ? getContent()
+      : null;
+  const image =
+    roundType === CONTENT_TYPES.phrase && roundNumber > 1 ? getContent() : null;
 
   return roundType === CONTENT_TYPES.phrase ? (
     <EnterPhrase
@@ -62,13 +73,13 @@ const PlayingPhase: React.FC<Props> = ({ onSubmitContent }) => {
       image={image}
     />
   ) : (
-      <EnterDrawing
-        onSubmit={(content: string) =>
-          handleContentSubmit({ contentType: CONTENT_TYPES.drawing, content })
-        }
-        phrase={phrase}
-      />
-    )
-}
+    <EnterDrawing
+      onSubmit={(content: string) =>
+        handleContentSubmit({ contentType: CONTENT_TYPES.drawing, content })
+      }
+      phrase={phrase}
+    />
+  );
+};
 
 export default PlayingPhase;

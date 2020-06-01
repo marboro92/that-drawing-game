@@ -6,7 +6,7 @@ import "typeface-open-sans";
 import Lobby from "routes/Lobby";
 import Intro from "routes/Intro";
 import Game from "routes/Game";
-import HostContext from "HostContext";
+import AppContext from "AppContext";
 import { CONTENT_TYPES } from "utilities/content-types";
 
 require("dotenv").config();
@@ -36,7 +36,7 @@ const App = () => {
   };
 
   return (
-    <HostContext.Provider value={contextValue}>
+    <AppContext.Provider value={contextValue}>
       <Router>
         <NDSProvider>
           <Switch>
@@ -52,7 +52,7 @@ const App = () => {
           </Switch>
         </NDSProvider>
       </Router>
-    </HostContext.Provider>
+    </AppContext.Provider>
   );
 };
 
