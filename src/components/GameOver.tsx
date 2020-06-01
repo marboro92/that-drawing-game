@@ -2,7 +2,7 @@ import React from "react";
 
 type Props = {};
 
-export const GameOver: React.FC<Props> = () => {
+const GameOver: React.FC<Props> = () => {
   return (
     <>
       <div>The game is over! Hope you had fun!</div>
@@ -13,3 +13,5 @@ export const GameOver: React.FC<Props> = () => {
     </>
   );
 };
+
+export default GameOver;

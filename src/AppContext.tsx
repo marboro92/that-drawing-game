@@ -1,7 +1,7 @@
 import React from "react";
 import { CONTENT_TYPES } from "utilities/content-types";
 
-const HostContext: any = React.createContext({
+const AppContext: any = React.createContext({
   isHost: false,
   playerName: "",
   roomId: "",
@@ -18,4 +18,4 @@ const HostContext: any = React.createContext({
   setRoundNumber: (val: number) => {},
 });
 
-export default HostContext;
+export default AppContext;

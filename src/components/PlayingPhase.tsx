@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { CONTENT_TYPES } from "utilities/content-types";
 import { postContent } from "database/content";
-import HostContext from "../HostContext";
+import AppContext from "../AppContext";
 import { EnterPhrase } from "components/EnterPhrase";
 import { EnterDrawing } from "components/EnterDrawing";
 
@@ -22,7 +22,7 @@ const PlayingPhase: React.FC<Props> = ({ onSubmitContent }) => {
     setRoundType,
     roundNumber,
     room,
-  } = useContext(HostContext);
+  } = useContext(AppContext);
   const handleContentSubmit = async ({
     contentType,
     content,

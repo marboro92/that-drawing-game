@@ -1,11 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 
+import watchRoom from "database/watchRoom";
+
+import PhaseContainer from "components/PhaseContainer";
 import PlayingPhase from "components/PlayingPhase";
-import { GameOver } from "components/GameOver";
-import { WaitingScreen } from "components/WaitingScreen";
-import watchRoom from "../database/watchRoom";
-import { PhaseContainer } from "components/PhaseContainer";
-import HostContext from "../HostContext";
+import WaitingScreen from "components/WaitingScreen";
+import GameOver from "components/GameOver";
+
+import AppContext from "../AppContext";
 
 type Props = {
   children?: React.ReactNode;
@@ -28,7 +30,7 @@ const checkAllPlayersCompletedRound = ({
 
 const Game: React.FC<Props> = ({ children }) => {
   const { roomId, setRoom, room, roundNumber, setRoundNumber } = useContext(
-    HostContext
+    AppContext
   );
 
   const [canProceedToNextRound, setCanProceedToNextRound] = useState(false);
