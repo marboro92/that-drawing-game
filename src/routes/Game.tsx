@@ -26,16 +26,10 @@ const checkAllPlayersCompletedRound = ({
 };
 
 const Game: React.FC<Props> = ({ children }) => {
-  const { roomId, setRoom, room } = useContext(HostContext);
+  const { roomId, setRoom, room, roundNumber, setRoundNumber } = useContext(HostContext);
 
   const [canProceedToNextRound, setCanProceedToNextRound] = useState(false);
-  const [roundNumber, setRoundNumber] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-
-  const handleProceedToNextRound = () => {
-    setIsPlaying(true);
-    setRoundNumber((roundNumber) => roundNumber + 1);
-  };
 
   // Continually add room to context
   useEffect(() => {
@@ -61,8 +55,11 @@ const Game: React.FC<Props> = ({ children }) => {
 
   // Increment round number when users are able to proceed to next round
   useEffect(() => {
-    canProceedToNextRound && handleProceedToNextRound();
-  }, [canProceedToNextRound]);
+    if (canProceedToNextRound) {
+      setIsPlaying(true);
+      setRoundNumber((roundNumber: number) => roundNumber + 1);
+    }
+  }, [canProceedToNextRound, setRoundNumber]);
 
   const finishPlaying = () => {
     setIsPlaying(false);

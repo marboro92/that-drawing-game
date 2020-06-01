@@ -16,7 +16,8 @@ const App = () => {
   const [playerName, setPlayerName] = useState<string | null>("");
   const [roomId, setRoomId] = useState<string | null>("");
   const [room, setRoom] = useState<{} | null>("");
-  const [roundType, setRoundType] = useState<{} | null>(CONTENT_TYPES.phrase);
+  const [roundType, setRoundType] = useState<string>(CONTENT_TYPES.phrase);
+  const [roundNumber, setRoundNumber] = useState(0);
 
   const contextValue = {
     isHost,
@@ -24,11 +25,14 @@ const App = () => {
     roomId,
     room,
     roundType,
+    roundNumber,
+
     setIsHost,
     setPlayerName,
     setRoomId,
     setRoom,
     setRoundType,
+    setRoundNumber,
   };
 
   return (
