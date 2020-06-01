@@ -32,7 +32,7 @@ const App = () => {
     setRoomId,
     setRoom,
     setRoundType,
-    setRoundNumber
+    setRoundNumber,
   };
 
   return (

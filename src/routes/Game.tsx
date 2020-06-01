@@ -2,16 +2,15 @@ import React, { useState, useContext, useEffect } from "react";
 import { PhaseContainer } from "../components/PhaseContainer";
 import HostContext from "../HostContext";
 
-
 import { WaitingScreen } from "components/WaitingScreen";
-import watchRoom from '../database/watchRoom';
+import watchRoom from "../database/watchRoom";
 import PlayingPhase from "components/PlayingPhase";
 
 type Props = {
   children?: React.ReactNode;
 };
 
-type checkAllPlayersCompletedRound = {
+type CheckAllPlayersCompletedRoundType = {
   players: any;
   roundNumber: number;
 };
@@ -19,7 +18,7 @@ type checkAllPlayersCompletedRound = {
 const checkAllPlayersCompletedRound = ({
   players = [],
   roundNumber,
-}: checkAllPlayersCompletedRound) => {
+}: CheckAllPlayersCompletedRoundType) => {
   const values = Object.values(players);
   const filteredValues = values.filter((value) => value.length === roundNumber);
 
@@ -29,7 +28,6 @@ const checkAllPlayersCompletedRound = ({
 const Game: React.FC<Props> = ({ children }) => {
   const { roomId, setRoom, room, roundNumber, setRoundNumber } = useContext(HostContext);
 
-
   const [canProceedToNextRound, setCanProceedToNextRound] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
 
@@ -37,7 +35,7 @@ const Game: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     let unsubscibe: any = null;
     if (roomId) {
-      unsubscibe = watchRoom(roomId, setRoom)
+      unsubscibe = watchRoom(roomId, setRoom);
       return () => {
         unsubscibe();
       };
@@ -64,12 +62,16 @@ const Game: React.FC<Props> = ({ children }) => {
   }, [canProceedToNextRound, setRoundNumber]);
 
   const finishPlaying = () => {
-    setIsPlaying(false)
-  }
+    setIsPlaying(false);
+  };
 
   return (
     <PhaseContainer>
-      {isPlaying ? <PlayingPhase onSubmitContent={finishPlaying} /> : <WaitingScreen />}
+      {isPlaying ? (
+        <PlayingPhase onSubmitContent={finishPlaying} />
+      ) : (
+        <WaitingScreen />
+      )}
     </PhaseContainer>
   );
 };

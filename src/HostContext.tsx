@@ -10,12 +10,12 @@ const HostContext: any = React.createContext({
   roundNumber: 0,
 
   //Functions
-  setIsHost: (val: boolean) => { },
-  setPlayerName: (val: string | null) => { },
-  setRoomId: (val: string | null) => { },
-  setRoom: (val: any) => { },
-  setRoundType: (val: string) => { },
-  setRoundNumber: (val: number) => { }
+  setIsHost: (val: boolean) => {},
+  setPlayerName: (val: string | null) => {},
+  setRoomId: (val: string | null) => {},
+  setRoom: (val: any) => {},
+  setRoundType: (val: string) => {},
+  setRoundNumber: (val: number) => {},
 });
 
 export default HostContext;
