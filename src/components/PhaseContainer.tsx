@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-export const PhaseContainer = styled.div({
+const PhaseContainer = styled.div({
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
@@ -9,5 +9,7 @@ export const PhaseContainer = styled.div({
   padding: "16px",
   margin: "8px",
   border: "1px solid blue",
-  fontFamily: "Open Sans"
-})
+  fontFamily: "Open Sans",
+});
+
+export default PhaseContainer;

@@ -1,10 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
-import { PhaseContainer } from "../components/PhaseContainer";
-import HostContext from "../HostContext";
 
-import { WaitingScreen } from "components/WaitingScreen";
-import watchRoom from "../database/watchRoom";
+import watchRoom from "database/watchRoom";
+
+import PhaseContainer from "components/PhaseContainer";
 import PlayingPhase from "components/PlayingPhase";
+import WaitingScreen from "components/WaitingScreen";
+import GameOver from "components/GameOver";
+
+import AppContext from "../AppContext";
 
 type Props = {
   children?: React.ReactNode;
@@ -26,10 +29,13 @@ const checkAllPlayersCompletedRound = ({
 };
 
 const Game: React.FC<Props> = ({ children }) => {
-  const { roomId, setRoom, room, roundNumber, setRoundNumber } = useContext(HostContext);
+  const { roomId, setRoom, room, roundNumber, setRoundNumber } = useContext(
+    AppContext
+  );
 
   const [canProceedToNextRound, setCanProceedToNextRound] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   // Continually add room to context
   useEffect(() => {
@@ -61,13 +67,26 @@ const Game: React.FC<Props> = ({ children }) => {
     }
   }, [canProceedToNextRound, setRoundNumber]);
 
+  //Check if the game is over
+  useEffect(() => {
+    //TODO: Test this
+    const hasGameCompleted = () =>
+      canProceedToNextRound &&
+      room?.players &&
+      Object.keys(room.players).length < roundNumber;
+
+    hasGameCompleted() && setIsGameOver(true);
+  }, [canProceedToNextRound, room, roundNumber]);
+
   const finishPlaying = () => {
     setIsPlaying(false);
   };
 
   return (
     <PhaseContainer>
-      {isPlaying ? (
+      {isGameOver ? (
+        <GameOver />
+      ) : isPlaying ? (
         <PlayingPhase onSubmitContent={finishPlaying} />
       ) : (
         <WaitingScreen />

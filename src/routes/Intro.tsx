@@ -5,8 +5,8 @@ import { History } from "history";
 import { db } from "database";
 import styled from "styled-components";
 
-import HostContext from "../HostContext";
-import { PhaseContainer } from "../components/PhaseContainer";
+import AppContext from "../AppContext";
+import PhaseContainer from "../components/PhaseContainer";
 import { Button } from "../components/Button";
 
 const Title = styled.h1({
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const Intro: React.FC<Props> = ({ history }) => {
-  const { setIsHost, setPlayerName, setRoomId } = useContext(HostContext);
+  const { setIsHost, setPlayerName, setRoomId } = useContext(AppContext);
   const [hostName, setHostName] = useState<string>("");
 
   const initRoom = async () => {

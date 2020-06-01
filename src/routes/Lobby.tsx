@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, Box, Input } from "@nulogy/components";
 import { useParams, Link, withRouter } from "react-router-dom";
-import { db } from "database";
 import { History } from "history";
+import { Text, Box, Input } from "@nulogy/components";
 
-import HostContext from "../HostContext";
-import { PhaseContainer } from "../components/PhaseContainer";
-import { Button } from "../components/Button";
+import { db } from "database";
+
+import PhaseContainer from "components/PhaseContainer";
+import { Button } from "components/Button";
+
+import AppContext from "../AppContext";
 
 type Props = {
   history: History;
@@ -14,7 +16,7 @@ type Props = {
 
 const Lobby = ({ history }: Props) => {
   const { isHost, roomId, setRoomId, playerName, setPlayerName } = useContext(
-    HostContext
+    AppContext
   );
   const { roomCode } = useParams();
 
@@ -95,7 +97,7 @@ const Lobby = ({ history }: Props) => {
   // Redirect player to game if game has begun
   useEffect(() => {
     if (isGameOngoing) history.push(`/${roomCode}/game`);
-    return () => { };
+    return () => {};
   }, [history, isGameOngoing, roomCode]);
 
   const playerNameHandler = (event: React.FormEvent<EventTarget>) => {
@@ -144,8 +146,8 @@ const Lobby = ({ history }: Props) => {
           Everyone's in, Start the Game
         </Button>
       ) : (
-          <Button onClick={joinRoom}>Submit</Button>
-        )}
+        <Button onClick={joinRoom}>Submit</Button>
+      )}
     </PhaseContainer>
   );
 };
