@@ -15,6 +15,11 @@ const GameOver: React.FC<Props> = () => {
       playerName,
     });
 
+    console.log("contentToDisplay", contentToDisplay);
+    // TODO:
+    // Show the different guesses and images
+    // Load canvas here to draw the image
+
     //Use this index to render all the things of that index from every player's content
     return () => {};
   }, []);
