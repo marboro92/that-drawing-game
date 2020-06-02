@@ -1,6 +1,7 @@
 import React from "react";
 import { CONTENT_TYPES } from "utilities/content-types";
 
+//TODO: Fix the types of things in context
 const AppContext = React.createContext<Partial<ContextProps>>({
   isHost: false,
   playerName: "",

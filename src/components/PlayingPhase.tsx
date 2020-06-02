@@ -28,7 +28,7 @@ const PlayingPhase: React.FC<Props> = ({ onSubmitContent }) => {
     content,
   }: ContentSubmitParams) => {
     onSubmitContent();
-    /// needs loading screen nad error handing
+    // TODO: needs loading screen nad error handing
     if (contentType === CONTENT_TYPES.drawing) {
       setRoundType(CONTENT_TYPES.phrase);
     } else {
