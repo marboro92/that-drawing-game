@@ -24,7 +24,7 @@ type ContextProps = {
   playerName: string;
   roomId: string;
   room: RoomType;
-  roundType: any; //Fix
+  roundType: any; // Add round type here
   roundNumber: number;
 
   //Functions
@@ -36,6 +36,6 @@ type ContextProps = {
   setRoundNumber: (val: number) => void;
 };
 
-type RoomType = any; //Fix
+type RoomType = any; // Add room type here
 
 export default AppContext;
