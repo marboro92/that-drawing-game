@@ -1,4 +1,3 @@
-// Returns all the content for a given player's round
 type getGameContentForRoundType = {
   playersInRoom: object;
   playerName: string;
@@ -29,7 +28,7 @@ export const getGameContentForRound = ({
  * The order of keys in a JS object is in the order by which they were added. Taking advantage of that here
  * @param initialObject
  */
-const sortObject = (initialObject: any) =>
+export const sortObject = (initialObject: any) =>
   Object.keys(initialObject)
     .sort()
     .reduce<object>(
@@ -52,11 +51,18 @@ const sortObject = (initialObject: any) =>
 //   return valuesBeforeIndex;
 // };
 
+type getContentForRoundType = {
+  contentData: object;
+  index: number;
+};
 /**
  * Takes in content and data for a square matrix and returns that round's content
  * @param contentData @param index
  */
-const getContentForRound = ({ contentData, index }) => {
+export const getContentForRound = ({
+  contentData,
+  index,
+}: getContentForRoundType) => {
   let content = [];
   for (const [_, value] of Object.entries(contentData)) {
     content.push(value[index]);
